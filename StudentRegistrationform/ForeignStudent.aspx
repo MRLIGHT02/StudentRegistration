@@ -128,7 +128,7 @@
                                 </asp:TemplateField>
                                 <asp:TemplateField>
                                     <ItemTemplate>
-                                        <asp:LinkButton ID="delbtn" Text="Delete" ForeColor="Red" runat="server" CommandName="deltabtn" CommandArgument=' <%# Eval("studentid") %>'></asp:LinkButton>
+                                        <asp:Button ID="delbtn" Text="Delete" ForeColor="Red" runat="server" CommandName="deltabtn" CommandArgument=' <%# Eval("studentid") %>'></asp:Button>
                                     </ItemTemplate>
                                 </asp:TemplateField>
 
