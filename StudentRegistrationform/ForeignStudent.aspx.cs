@@ -33,8 +33,8 @@ namespace StudentRegistrationform
         {
             if (string.IsNullOrWhiteSpace(stdname.Text) ||
        string.IsNullOrWhiteSpace(fathername.Text) ||
-       stdgender.SelectedIndex == 0 ||
-       maritalstatus.SelectedIndex == 0 ||
+       stdgender.SelectedIndex == -1 ||
+       maritalstatus.SelectedIndex == -1 ||
        nationality.SelectedIndex == 0 ||
        stdstate.SelectedIndex == 0 ||
        stdcity.SelectedIndex == 0 ||
@@ -168,7 +168,15 @@ JOIN tblCity c ON stdcity = c.cityid;";
         }
         protected void gvdata_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-
+            if (e.CommandName == "deltabtn")
+            {
+                con.Open();
+                string delquery = "DELETE FROM StudentInfo WHERE studentid='" + e.CommandArgument + "'";
+                SqlCommand cmd = new SqlCommand(delquery, con);
+                cmd.ExecuteNonQuery();
+                con.Close();
+                ShowDataInGridView();
+            }
         }
     }
 }

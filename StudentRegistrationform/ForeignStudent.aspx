@@ -70,12 +70,12 @@
                     <td>
                         <asp:Button ID="btnsubmit" runat="server" Text="Submit" OnClick="btnsubmit_Click" /></td>
                 </tr>
-                
+
                 <tr>
                     <td>
                         <asp:Label ID="lblMessage" runat="server" Text="" ForeColor="Red"></asp:Label></td>
                 </tr>
-                
+
                 <tr>
                     <td></td>
                     <td>
@@ -124,6 +124,11 @@
                                 <asp:TemplateField HeaderText="PassPort Id">
                                     <ItemTemplate>
                                         <%#Eval("stdpass") %>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField>
+                                    <ItemTemplate>
+                                        <asp:LinkButton ID="delbtn" Text="Delete" ForeColor="Red" runat="server" CommandName="deltabtn" CommandArgument=' <%# Eval("studentid") %>'></asp:LinkButton>
                                     </ItemTemplate>
                                 </asp:TemplateField>
 
