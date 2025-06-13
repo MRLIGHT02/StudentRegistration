@@ -18,9 +18,12 @@ namespace StudentRegistrationform
             if (!IsPostBack)
             {
                 // code
+                BindCountry();
                 BindGenderRadioList();
                 MarriageStatus();
-                BindCountry();
+
+
+                ShowDataInGridView();
             }
 
         }
@@ -28,6 +31,22 @@ namespace StudentRegistrationform
 
         protected void btnsubmit_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(stdname.Text) ||
+       string.IsNullOrWhiteSpace(fathername.Text) ||
+       stdgender.SelectedIndex == 0 ||
+       maritalstatus.SelectedIndex == 0 ||
+       nationality.SelectedIndex == 0 ||
+       stdstate.SelectedIndex == 0 ||
+       stdcity.SelectedIndex == 0 ||
+       string.IsNullOrWhiteSpace(passportnumber.Text))
+            {
+                // Show some message
+                lblMessage.Text = "All fields are required!";
+                lblMessage.ForeColor = System.Drawing.Color.Red;
+                return;
+            }
+            lblMessage.Text = "";
+
             con.Open();
             string querystring = @"insert into StudentInfo(studentname,fathename,stdgender
 ,stdmaritalstatus,stdcountryname,stdstatename,stdcity,stdpass) values('" + stdname.Text + "','"
@@ -38,6 +57,8 @@ namespace StudentRegistrationform
             command.ExecuteNonQuery();
             con.Close();
             ClearFields();
+            ShowDataInGridView();
+            BindCountry();
         }
 
         public void BindGenderRadioList()
@@ -78,6 +99,7 @@ namespace StudentRegistrationform
             stdgender.ClearSelection();
             maritalstatus.ClearSelection();
             nationality.Items.Clear();
+
             stdstate.Items.Clear();
             stdcity.Items.Clear();
         }
@@ -95,6 +117,25 @@ namespace StudentRegistrationform
             nationality.DataSource = dt;
             nationality.DataBind();
             nationality.Items.Insert(0, new ListItem("--Select--", "0"));
+        }
+
+        public void ShowDataInGridView()
+        {
+            string joinDataShowToGrid = @"SELECT *
+FROM StudentInfo
+JOIN tblgender ON stdgender= genderid
+JOIN tblMaritalstatus ON stdmaritalstatus =maritialid
+JOIN tblNationlity n ON stdcountryname = n.countryid
+JOIN tblState st ON stdstatename = st.stateid
+JOIN tblCity c ON stdcity = c.cityid;";
+            con.Open();
+            SqlCommand cmd = new SqlCommand(joinDataShowToGrid, con);
+            SqlDataAdapter sda = new SqlDataAdapter(cmd);
+            DataTable dt = new DataTable();
+            sda.Fill(dt);
+            gvdata.DataSource = dt;
+            gvdata.DataBind();
+            con.Close();
         }
         protected void nationality_SelectedIndexChanged(object sender, EventArgs e)
         {

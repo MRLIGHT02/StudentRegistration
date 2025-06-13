@@ -70,10 +70,65 @@
                     <td>
                         <asp:Button ID="btnsubmit" runat="server" Text="Submit" OnClick="btnsubmit_Click" /></td>
                 </tr>
+                
+                <tr>
+                    <td>
+                        <asp:Label ID="lblMessage" runat="server" Text="" ForeColor="Red"></asp:Label></td>
+                </tr>
+                
                 <tr>
                     <td></td>
                     <td>
                         <asp:GridView ID="gvdata" runat="server" AutoGenerateColumns="false" OnRowCommand="gvdata_RowCommand">
+                            <Columns>
+                                <asp:TemplateField HeaderText="Student Id">
+                                    <ItemTemplate>
+                                        <%#Eval("studentid") %>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField HeaderText="Student Name">
+                                    <ItemTemplate>
+                                        <%#Eval("studentname") %>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField HeaderText="Father Name">
+                                    <ItemTemplate>
+                                        <%#Eval("fathename") %>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField HeaderText="Student Gender">
+                                    <ItemTemplate>
+                                        <%#Eval("gendername") %>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField HeaderText="Maritial Status">
+                                    <ItemTemplate>
+                                        <%#Eval("maristatus") %>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField HeaderText="Student Country">
+                                    <ItemTemplate>
+                                        <%#Eval("countryname") %>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField HeaderText="Student State">
+                                    <ItemTemplate>
+                                        <%#Eval("statename") %>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField HeaderText="Student City">
+                                    <ItemTemplate>
+                                        <%#Eval("cityname") %>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField HeaderText="PassPort Id">
+                                    <ItemTemplate>
+                                        <%#Eval("stdpass") %>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+
+                            </Columns>
+
                         </asp:GridView>
                     </td>
                 </tr>
