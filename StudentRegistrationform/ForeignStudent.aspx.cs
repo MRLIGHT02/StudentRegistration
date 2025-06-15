@@ -32,34 +32,67 @@ namespace StudentRegistrationform
 
         protected void btnsubmit_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(stdname.Text) ||
-       string.IsNullOrWhiteSpace(fathername.Text) ||
-       stdgender.SelectedIndex == -1 ||
-       maritalstatus.SelectedIndex == -1 ||
-       nationality.SelectedIndex == 0 ||
-       stdstate.SelectedIndex == 0 ||
-       stdcity.SelectedIndex == 0 ||
-       string.IsNullOrWhiteSpace(passportnumber.Text))
+            if (btnsubmit.Text == "Submit")
             {
-                // Show some message
-                lblMessage.Text = "All fields are required!";
-                lblMessage.ForeColor = System.Drawing.Color.Red;
-                return;
-            }
-            lblMessage.Text = "";
 
-            con.Open();
-            string querystring = @"insert into StudentInfo(studentname,fathename,stdgender
+                if (string.IsNullOrWhiteSpace(stdname.Text) ||
+           string.IsNullOrWhiteSpace(fathername.Text) ||
+           stdgender.SelectedIndex == -1 ||
+           maritalstatus.SelectedIndex == -1 ||
+           nationality.SelectedIndex == 0 ||
+           stdstate.SelectedIndex == 0 ||
+           stdcity.SelectedIndex == 0 ||
+           string.IsNullOrWhiteSpace(passportnumber.Text))
+                {
+                    // Show some message
+                    lblMessage.Text = "All fields are required!";
+                    lblMessage.ForeColor = System.Drawing.Color.Red;
+                    return;
+                }
+                lblMessage.Text = "";
+
+                con.Open();
+                string querystring = @"insert into StudentInfo(studentname,fathename,stdgender
 ,stdmaritalstatus,stdcountryname,stdstatename,stdcity,stdpass) values('" + stdname.Text + "','"
-+ fathername.Text + "','" + stdgender.SelectedValue + "','" + maritalstatus.SelectedValue + "'," +
-"'" + nationality.SelectedValue + "','" + stdstate.SelectedValue + "','" + stdcity.SelectedValue + "','" + passportnumber.Text + "')";
+    + fathername.Text + "','" + stdgender.SelectedValue + "','" + maritalstatus.SelectedValue + "'," +
+    "'" + nationality.SelectedValue + "','" + stdstate.SelectedValue + "','" + stdcity.SelectedValue + "','" + passportnumber.Text + "')";
 
-            SqlCommand command = new SqlCommand(querystring, con);
-            command.ExecuteNonQuery();
-            con.Close();
-            ClearFields();
-            ShowDataInGridView();
-            BindCountry();
+                SqlCommand command = new SqlCommand(querystring, con);
+                command.ExecuteNonQuery();
+                con.Close();
+                ClearFields();
+                ShowDataInGridView();
+                BindCountry();
+            }
+            else if (btnsubmit.Text == "Update")
+            {
+                if (string.IsNullOrWhiteSpace(stdname.Text) ||
+         string.IsNullOrWhiteSpace(fathername.Text) ||
+         stdgender.SelectedIndex == -1 ||
+         maritalstatus.SelectedIndex == -1 ||
+         nationality.SelectedIndex == 0 ||
+         stdstate.SelectedIndex == 0 ||
+         stdcity.SelectedIndex == 0 ||
+         string.IsNullOrWhiteSpace(passportnumber.Text))
+                {
+                    // Show some message
+                    lblMessage.Text = "All fields are required!";
+                    lblMessage.ForeColor = System.Drawing.Color.Red;
+                    return;
+                }
+                lblMessage.Text = "";
+
+                con.Open();
+                string querystring = @"update StudentInfo set studentname='" + stdname.Text + "',fathename='" + fathername.Text + "',stdgender='" + stdgender.SelectedValue + "',stdmaritalstatus='" + maritalstatus.SelectedValue + "',stdcountryname='" + nationality.SelectedValue + "',stdstatename='" + stdstate.SelectedValue + "',stdcity='" + stdcity.SelectedValue + "',stdpass='" + passportnumber.Text + "'where ";
+
+
+                SqlCommand command = new SqlCommand(querystring, con);
+                command.ExecuteNonQuery();
+                con.Close();
+                ClearFields();
+                ShowDataInGridView();
+                BindCountry();
+            }
         }
 
         public void BindGenderRadioList()
@@ -103,6 +136,7 @@ namespace StudentRegistrationform
 
             stdstate.Items.Clear();
             stdcity.Items.Clear();
+            btnsubmit.Text = "Submit";
         }
 
         public void BindCountry()
@@ -199,9 +233,14 @@ JOIN tblCity c ON stdcity = c.cityid;";
                 stdgender.SelectedValue = dt.Rows[0]["stdgender"].ToString();
                 maritalstatus.SelectedValue = dt.Rows[0]["stdmaritalstatus"].ToString();
                 nationality.SelectedValue = dt.Rows[0]["stdcountryname"].ToString();
+                ChangeStateAccordingToCountry();
                 stdstate.SelectedValue = dt.Rows[0]["stdstatename"].ToString();
+                ChangeCityAccordingToState();
                 stdcity.SelectedValue = dt.Rows[0]["stdcity"].ToString();
                 passportnumber.Text = dt.Rows[0]["stdpass"].ToString();
+
+                btnsubmit.Text = "Update";
+                ViewState["cmdarg"] = e.CommandArgument;
             }
         }
     }
