@@ -6,6 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data.SqlClient;
 using System.Data;
+using System.Security.Permissions;
 
 namespace StudentRegistrationform
 {
@@ -137,7 +138,7 @@ JOIN tblCity c ON stdcity = c.cityid;";
             gvdata.DataBind();
             con.Close();
         }
-        protected void nationality_SelectedIndexChanged(object sender, EventArgs e)
+        public void ChangeStateAccordingToCountry()
         {
             con.Open();
             SqlCommand sqlCommand = new SqlCommand("select * from tblState where countryid='" + nationality.SelectedValue + "'", con);
@@ -151,8 +152,12 @@ JOIN tblCity c ON stdcity = c.cityid;";
             stdstate.DataBind();
             stdstate.Items.Insert(0, new ListItem("--Select--", "0"));
         }
+        protected void nationality_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ChangeStateAccordingToCountry();
+        }
 
-        protected void stdstate_SelectedIndexChanged(object sender, EventArgs e)
+        public void ChangeCityAccordingToState()
         {
             con.Open();
             SqlCommand sqlCommand = new SqlCommand("select * from tblcity where stateid='" + stdstate.SelectedValue + "'", con);
@@ -166,6 +171,10 @@ JOIN tblCity c ON stdcity = c.cityid;";
             stdcity.DataBind();
             stdcity.Items.Insert(0, new ListItem("--Select--", "0"));
         }
+        protected void stdstate_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ChangeCityAccordingToState();
+        }
         protected void gvdata_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             if (e.CommandName == "deltabtn")
@@ -176,6 +185,23 @@ JOIN tblCity c ON stdcity = c.cityid;";
                 cmd.ExecuteNonQuery();
                 con.Close();
                 ShowDataInGridView();
+            }
+            if (e.CommandName == "editbtn")
+            {
+                con.Open();
+                SqlCommand sqlCommand = new SqlCommand("select * from StudentInfo where studentid='" + e.CommandArgument + "'", con);
+                SqlDataAdapter da = new SqlDataAdapter(sqlCommand);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                con.Close();
+                stdname.Text = dt.Rows[0]["studentname"].ToString();
+                fathername.Text = dt.Rows[0]["fathename"].ToString();
+                stdgender.SelectedValue = dt.Rows[0]["stdgender"].ToString();
+                maritalstatus.SelectedValue = dt.Rows[0]["stdmaritalstatus"].ToString();
+                nationality.SelectedValue = dt.Rows[0]["stdcountryname"].ToString();
+                stdstate.SelectedValue = dt.Rows[0]["stdstatename"].ToString();
+                stdcity.SelectedValue = dt.Rows[0]["stdcity"].ToString();
+                passportnumber.Text = dt.Rows[0]["stdpass"].ToString();
             }
         }
     }

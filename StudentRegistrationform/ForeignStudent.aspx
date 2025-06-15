@@ -131,6 +131,11 @@
                                         <asp:Button ID="delbtn" Text="Delete" ForeColor="Red" runat="server" CommandName="deltabtn" CommandArgument=' <%# Eval("studentid") %>'></asp:Button>
                                     </ItemTemplate>
                                 </asp:TemplateField>
+                                <asp:TemplateField>
+                                    <ItemTemplate>
+                                        <asp:Button ID="edtbtn" Text="Edit" ForeColor="Blue" runat="server" CommandName="editbtn" CommandArgument=' <%# Eval("studentid") %>'></asp:Button>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
 
                             </Columns>
 
