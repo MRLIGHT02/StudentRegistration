@@ -16,13 +16,19 @@ namespace StudentRegistrationform
         SqlConnection con = new SqlConnection("data source=DESKTOP-R54CT7O;initial catalog=ForeignStudent;integrated security=true");
         protected void Page_Load(object sender, EventArgs e)
         {
+
             if (!IsPostBack)
             {
                 // code
                 BindCountry();
                 BindGenderRadioList();
-                MarriageStatus();
 
+                MarriageStatus();
+                stdstate.Items.Insert(0, new ListItem("--Select--", "0"));
+                stdstate.Enabled = false;
+
+                stdcity.Items.Insert(0, new ListItem("--Select--", "0"));
+                stdcity.Enabled = false;
 
                 ShowDataInGridView();
             }
@@ -83,7 +89,7 @@ namespace StudentRegistrationform
                 lblMessage.Text = "";
 
                 con.Open();
-                string querystring = @"update StudentInfo set studentname='" + stdname.Text + "',fathename='" + fathername.Text + "',stdgender='" + stdgender.SelectedValue + "',stdmaritalstatus='" + maritalstatus.SelectedValue + "',stdcountryname='" + nationality.SelectedValue + "',stdstatename='" + stdstate.SelectedValue + "',stdcity='" + stdcity.SelectedValue + "',stdpass='" + passportnumber.Text + "'where ";
+                string querystring = @"update StudentInfo set studentname='" + stdname.Text + "',fathename='" + fathername.Text + "',stdgender='" + stdgender.SelectedValue + "',stdmaritalstatus='" + maritalstatus.SelectedValue + "',stdcountryname='" + nationality.SelectedValue + "',stdstatename='" + stdstate.SelectedValue + "',stdcity='" + stdcity.SelectedValue + "',stdpass='" + passportnumber.Text + "'where studentid='" + ViewState["cmdarg"] + "'";
 
 
                 SqlCommand command = new SqlCommand(querystring, con);
@@ -148,10 +154,12 @@ namespace StudentRegistrationform
             da.Fill(dt);
             con.Close();
             nationality.DataValueField = "countryid";
+
             nationality.DataTextField = "countryname";
             nationality.DataSource = dt;
             nationality.DataBind();
             nationality.Items.Insert(0, new ListItem("--Select--", "0"));
+
         }
 
         public void ShowDataInGridView()
@@ -180,6 +188,7 @@ JOIN tblCity c ON stdcity = c.cityid;";
             DataTable dt = new DataTable();
             da.Fill(dt);
             con.Close();
+            stdstate.Enabled = true;
             stdstate.DataValueField = "stateid";
             stdstate.DataTextField = "statename";
             stdstate.DataSource = dt;
@@ -188,7 +197,19 @@ JOIN tblCity c ON stdcity = c.cityid;";
         }
         protected void nationality_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ChangeStateAccordingToCountry();
+            if (nationality.SelectedValue == "0")
+            {
+                stdstate.Items.Insert(0, new ListItem("--Select--", "0"));
+                stdstate.Enabled = false;
+                stdcity.Enabled = false;
+
+            }
+            else
+            {
+                stdstate.Enabled = true;
+                
+                ChangeStateAccordingToCountry();
+            }
         }
 
         public void ChangeCityAccordingToState()
@@ -199,6 +220,7 @@ JOIN tblCity c ON stdcity = c.cityid;";
             DataTable dt = new DataTable();
             da.Fill(dt);
             con.Close();
+            stdcity.Enabled = true;
             stdcity.DataValueField = "cityid";
             stdcity.DataTextField = "cityname";
             stdcity.DataSource = dt;
@@ -207,7 +229,17 @@ JOIN tblCity c ON stdcity = c.cityid;";
         }
         protected void stdstate_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ChangeCityAccordingToState();
+            if (stdstate.SelectedValue == "0")
+            {
+                stdcity.Items.Insert(0, new ListItem("--Select--", "0"));
+                stdcity.Enabled = false;
+            }
+            else
+            {
+                stdcity.Enabled = true;
+
+                ChangeCityAccordingToState();
+            }
         }
         protected void gvdata_RowCommand(object sender, GridViewCommandEventArgs e)
         {
