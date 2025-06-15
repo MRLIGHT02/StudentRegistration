@@ -199,9 +199,9 @@ JOIN tblCity c ON stdcity = c.cityid;";
         {
             if (nationality.SelectedValue == "0")
             {
-                stdstate.Items.Insert(0, new ListItem("--Select--", "0"));
                 stdstate.Enabled = false;
                 stdcity.Enabled = false;
+                stdstate.SelectedValue = "0";
 
             }
             else
@@ -231,8 +231,8 @@ JOIN tblCity c ON stdcity = c.cityid;";
         {
             if (stdstate.SelectedValue == "0")
             {
-                stdcity.Items.Insert(0, new ListItem("--Select--", "0"));
                 stdcity.Enabled = false;
+                stdcity.SelectedValue = "0";
             }
             else
             {
